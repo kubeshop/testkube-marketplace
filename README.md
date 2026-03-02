@@ -1,6 +1,6 @@
-# Testkube Infrastructure Validation Workflows
+# Testkube Infrastructure Validation Catalog
 
-A community-driven collection of reusable [Testkube](https://testkube.io) workflows for validating infrastructure components in Kubernetes environments.
+A community-driven collection of reusable [Testkube](https://testkube.io) TestWorkflows for validating infrastructure components in Kubernetes environments.
 
 ## Overview
 
@@ -29,13 +29,16 @@ workflows/
 
 ## Quick Start
 
-### 1. Browse Available Workflows
+### 1. Browse Available TestWorkflows
 
-Explore the `workflows/` directory to find validation workflows for your infrastructure components. 
+Explore the `workflows/` directory to find validation TestWorkflows for your infrastructure components. 
 
-The Testkube Dashboard included with 
+The Testkube Dashboard provides a wizard for browsing this repository when create new TestWorkflows:
 
-### 2. Deploy a Workflow
+![Create From Catalog](create-from-catalog.png)
+
+
+### 2. Deploy a TestWorkflow
 
 ```bash
 # Apply directly to your Testkube instance
@@ -45,7 +48,7 @@ kubectl apply -f workflows/databases/redis/redis-connectivity.yaml
 testkube create testworkflow -f workflows/databases/redis/redis-connectivity.yaml
 ```
 
-### 3. Run the Workflow
+### 3. Run the TestWorkflow
 
 ```bash
 # Run with default configuration
@@ -57,9 +60,9 @@ testkube run testworkflow redis-connectivity \
   --config port=6379
 ```
 
-## Workflow Metadata
+## TestWorkflow Metadata
 
-All workflows include standardized metadata for easy discovery:
+All TestWorkflows in this repository include standardized metadata for easy discovery:
 
 ### Labels (for filtering)
 

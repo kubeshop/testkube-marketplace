@@ -3,14 +3,14 @@ kind: TestWorkflow
 metadata:
   name: redis-connectivity
   labels:
-    catalog.testkube.io/category: databases
-    catalog.testkube.io/component: redis
-    catalog.testkube.io/validation-type: connectivity
+    marketplace.testkube.io/category: databases
+    marketplace.testkube.io/component: redis
+    marketplace.testkube.io/validation-type: connectivity
   annotations:
-    catalog.testkube.io/display-name: "Redis Connectivity Check"
-    catalog.testkube.io/description: "Validates Redis server connectivity with PING and basic GET/SET operations"
-    catalog.testkube.io/icon: "https://cdn.simpleicons.org/redis"
-    catalog.testkube.io/tags: "redis,connectivity,health-check,database"
+    marketplace.testkube.io/display-name: "Redis Connectivity Check"
+    marketplace.testkube.io/description: "Validates Redis server connectivity with PING and basic GET/SET operations"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/redis"
+    marketplace.testkube.io/tags: "redis,connectivity,health-check,database"
 
 spec:
   config:

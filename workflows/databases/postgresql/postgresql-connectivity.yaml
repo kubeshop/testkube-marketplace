@@ -3,14 +3,14 @@ kind: TestWorkflow
 metadata:
   name: postgresql-connectivity
   labels:
-    catalog.testkube.io/category: databases
-    catalog.testkube.io/component: postgresql
-    catalog.testkube.io/validation-type: connectivity
+    marketplace.testkube.io/category: databases
+    marketplace.testkube.io/component: postgresql
+    marketplace.testkube.io/validation-type: connectivity
   annotations:
-    catalog.testkube.io/display-name: "PostgreSQL Connectivity Check"
-    catalog.testkube.io/description: "Validates PostgreSQL server connectivity, authentication, and basic query execution"
-    catalog.testkube.io/icon: "https://cdn.simpleicons.org/postgresql"
-    catalog.testkube.io/tags: "postgresql,postgres,connectivity,health-check,database,sql"
+    marketplace.testkube.io/display-name: "PostgreSQL Connectivity Check"
+    marketplace.testkube.io/description: "Validates PostgreSQL server connectivity, authentication, and basic query execution"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/postgresql"
+    marketplace.testkube.io/tags: "postgresql,postgres,connectivity,health-check,database,sql"
 
 spec:
   config:

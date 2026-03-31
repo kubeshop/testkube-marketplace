@@ -68,18 +68,18 @@ All TestWorkflows in this repository include standardized metadata for easy disc
 
 | Label | Purpose | Values |
 |-------|---------|--------|
-| `catalog.testkube.io/category` | Infrastructure type | `databases`, `messaging`, `caching`, `storage`, `networking`, `observability`, `security`, `other` |
-| `catalog.testkube.io/component` | Specific component | `redis`, `postgresql`, `kafka`, etc. |
-| `catalog.testkube.io/validation-type` | What's being validated | `connectivity`, `health`, `performance`, `security` |
+| `marketplace.testkube.io/category` | Infrastructure type | `databases`, `messaging`, `caching`, `storage`, `networking`, `observability`, `security`, `other` |
+| `marketplace.testkube.io/component` | Specific component | `redis`, `postgresql`, `kafka`, etc. |
+| `marketplace.testkube.io/validation-type` | What's being validated | `connectivity`, `health`, `performance`, `security` |
 
 ### Annotations (for display)
 
 | Annotation | Purpose |
 |------------|---------|
-| `catalog.testkube.io/display-name` | Human-readable name |
-| `catalog.testkube.io/description` | What the workflow validates |
-| `catalog.testkube.io/icon` | Icon identifier for UIs |
-| `catalog.testkube.io/tags` | Search keywords |
+| `marketplace.testkube.io/display-name` | Human-readable name |
+| `marketplace.testkube.io/description` | What the workflow validates |
+| `marketplace.testkube.io/icon` | Icon identifier for UIs |
+| `marketplace.testkube.io/tags` | Search keywords |
 
 ## Security
 

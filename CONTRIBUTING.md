@@ -146,8 +146,8 @@ Every workflow **must** include these labels:
 ```yaml
 metadata:
   labels:
-    catalog.testkube.io/category: "<category>"           # databases, messaging, etc.
-    catalog.testkube.io/component: "<component>"         # redis, kafka, etc.
+    marketplace.testkube.io/category: "<category>"           # databases, messaging, etc.
+    marketplace.testkube.io/component: "<component>"         # redis, kafka, etc.
 ```
 
 ### Required Annotations
@@ -157,8 +157,8 @@ Every workflow **must** include these annotations:
 ```yaml
 metadata:
   annotations:
-    catalog.testkube.io/display-name: "Human Readable Name"
-    catalog.testkube.io/description: "Clear description of what this workflow validates"
+    marketplace.testkube.io/display-name: "Human Readable Name"
+    marketplace.testkube.io/description: "Clear description of what this workflow validates"
 ```
 
 ### Recommended Annotations
@@ -166,7 +166,7 @@ metadata:
 ```yaml
 metadata:
   annotations:
-    catalog.testkube.io/icon: "https://cdn.simpleicons.org/<component>"  # Icon URL (see below)
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/<component>"  # Icon URL (see below)
 ```
 
 #### Finding Icon URLs

@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to the Testkube Infrastructure Validation Workflows repository!
+Thank you for your interest in contributing to the Testkube Infrastructure Validation Marketplace!
 
 ## Table of Contents
 
@@ -206,6 +206,17 @@ spec:
       sensitive: true
       description: "Redis password (optional)"
 ```
+
+These will be rendered in the Testkube Dashboard when importing a Workflow from this Marketplace:
+
+![Workflow Parameters](workflow-parameters.png)
+
+### Provide a README file for documentation
+
+Adding a README file to the folder containing your Workflow will render it under the Documentation tab in the 
+Testkube Dashboard when importing:
+
+![Workflow Documentation](workflow-documentation.png)
 
 ### Output and Logging
 

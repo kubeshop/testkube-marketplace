@@ -1,12 +1,6 @@
-# Redis Validation Workflows
+# Redis Validation Workflow
 
-Workflows for validating Redis server installations and configurations.
-
-## Available Workflows
-
-| Workflow | Description |
-|----------|-------------|
-| `redis-connectivity` | Basic connectivity check with PING and GET/SET operations |
+A simple Workflow for validating Redis server installations and configurations.
 
 ## Configuration Parameters
 

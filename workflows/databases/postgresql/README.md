@@ -1,12 +1,6 @@
-# PostgreSQL Validation Workflows
+# PostgreSQL Validation Workflow
 
-Workflows for validating PostgreSQL server installations and configurations.
-
-## Available Workflows
-
-| Workflow | Description |
-|----------|-------------|
-| `postgresql-connectivity` | Basic connectivity check with query execution |
+A simple Workflow for validating PostgreSQL server installations and configurations.
 
 ## Configuration Parameters
 

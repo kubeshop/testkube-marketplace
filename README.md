@@ -1,10 +1,10 @@
-# Testkube Infrastructure Validation Catalog
+# Testkube Infrastructure Validation Marketplace
 
 A community-driven collection of reusable [Testkube](https://testkube.io) TestWorkflows for validating infrastructure components in Kubernetes environments.
 
 ## Overview
 
-This repository contains pre-built TestWorkflows that validate the configuration and health of common infrastructure components like databases, message brokers, caching systems, and more.
+This repository contains pre-built TestWorkflows that validate the configuration and health of common infrastructure components like databases, message brokers, caching systems, and more. Read More about TestWorkflows [in the documentation](https://docs.testkube.io/articles/test-workflows).
 
 **Key Features:**
 - 🔌 **Plug-and-play** - Configure and run in minutes
@@ -33,12 +33,14 @@ workflows/
 
 Explore the `workflows/` directory to find validation TestWorkflows for your infrastructure components. 
 
-The Testkube Dashboard provides a wizard for browsing this repository when create new TestWorkflows:
+The [Testkube Dashboard](https://docs.testkube.io/articles/testkube-dashboard-explore) provides a wizard for browsing this repository when create new TestWorkflows:
 
 ![Create From Catalog](create-from-catalog.png)
 
 
 ### 2. Deploy a TestWorkflow
+
+If you're not using the Wizard mentioned above, clone this repo or download the Workflow YAML, and then
 
 ```bash
 # Apply directly to your Testkube instance

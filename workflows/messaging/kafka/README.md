@@ -1,12 +1,6 @@
 # Kafka Validation Workflows
 
-Workflows for validating Apache Kafka broker installations and configurations.
-
-## Available Workflows
-
-| Workflow | Description |
-|----------|-------------|
-| `kafka-connectivity` | Basic connectivity check with topic listing and produce/consume |
+A simple Workflow for validating Apache Kafka broker installations and configurations.
 
 ## Configuration Parameters
 

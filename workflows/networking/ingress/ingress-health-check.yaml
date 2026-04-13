@@ -37,6 +37,8 @@ spec:
             ingresses="$(kubectl get ingress -n "$ns_trimmed" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null || true)"
             [ -n "$ingresses" ] || continue
 
+            OLD_IFS="$IFS"
+            IFS="$(printf '\n')"
             for ing in $ingresses; do
               services="$(kubectl get ingress "$ing" -n "$ns_trimmed" -o jsonpath='{range .spec.rules[*].http.paths[*]}{.backend.service.name}{"\n"}{end}{.spec.defaultBackend.service.name}{"\n"}' | awk 'NF')"
               [ -n "$services" ] || { failed=1; echo "FAIL: No backend service for $ing"; continue; }
@@ -49,6 +51,7 @@ spec:
                 fi
               done
             done
+            IFS="$OLD_IFS"
           done
 
           [ "$failed" -eq 0 ] || exit 1

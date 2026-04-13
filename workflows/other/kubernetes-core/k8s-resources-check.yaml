@@ -1,0 +1,63 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: k8s-resources-check
+  labels:
+    marketplace.testkube.io/category: other
+    marketplace.testkube.io/component: kubernetes-core
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "Kubernetes Resources Check"
+    marketplace.testkube.io/description: "Validates PVC binding and prints CPU/RAM request-limit snapshots"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/kubernetes"
+    marketplace.testkube.io/tags: "kubernetes,cpu,memory,pvc,resources"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+    require_metrics_server:
+      type: string
+      default: "false"
+      description: "Fail if metrics-server is unavailable"
+  steps:
+    - name: "Validate Kubernetes Resources"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+          - name: REQUIRE_METRICS_SERVER
+            value: "{{ config.require_metrics_server }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+          failed=0
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking resources in namespace: $ns_trimmed"
+            kubectl get pods -n "$ns_trimmed" >/dev/null 2>&1 || continue
+
+            pvc_issues="$(kubectl get pvc -n "$ns_trimmed" -o jsonpath='{range .items[*]}{.metadata.name}{"|"}{.status.phase}{"|"}{.spec.volumeName}{"\n"}{end}' | awk -F'|' '$2!="Bound" || $3=="" {print}')"
+            if [ -n "$pvc_issues" ]; then
+              echo "FAIL: PVC binding issues:"
+              echo "$pvc_issues"
+              failed=1
+            fi
+
+            echo "Resource requests/limits snapshot:"
+            kubectl get pods -n "$ns_trimmed" -o custom-columns=NAME:.metadata.name,REQ_CPU:.spec.containers[*].resources.requests.cpu,REQ_MEM:.spec.containers[*].resources.requests.memory,LIM_CPU:.spec.containers[*].resources.limits.cpu,LIM_MEM:.spec.containers[*].resources.limits.memory --no-headers || true
+
+            if kubectl top pods -n "$ns_trimmed" >/dev/null 2>&1; then
+              echo "Metrics available for $ns_trimmed."
+            elif [ "$REQUIRE_METRICS_SERVER" = "true" ]; then
+              echo "FAIL: metrics-server not available in $ns_trimmed."
+              failed=1
+            fi
+          done
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "Kubernetes resources validation passed."

@@ -1,0 +1,48 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: statefulset-health-check
+  labels:
+    marketplace.testkube.io/category: other
+    marketplace.testkube.io/component: kubernetes-core
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "StatefulSet Health Check"
+    marketplace.testkube.io/description: "Validates that StatefulSet ready replicas match desired replicas"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/kubernetes"
+    marketplace.testkube.io/tags: "kubernetes,statefulset,replicas,health"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+  steps:
+    - name: "Validate StatefulSet Health"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+          failed=0
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking StatefulSets in namespace: $ns_trimmed"
+            kubectl get statefulset -n "$ns_trimmed" >/dev/null 2>&1 || continue
+
+            invalid="$(kubectl get statefulset -n "$ns_trimmed" -o custom-columns=NAME:.metadata.name,READY:.status.readyReplicas,REPLICAS:.spec.replicas --no-headers | awk '
+              { ready=$2; if (ready=="" || ready=="<none>") ready=0; if (ready != $3) print $1, "ready=" ready, "expected=" $3 }')"
+            if [ -n "$invalid" ]; then
+              echo "FAIL: StatefulSet replica mismatch:"
+              echo "$invalid"
+              failed=1
+            fi
+          done
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "StatefulSet validation passed."

@@ -1,0 +1,65 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: pod-health-check
+  labels:
+    marketplace.testkube.io/category: other
+    marketplace.testkube.io/component: kubernetes-core
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "Pod Health Check"
+    marketplace.testkube.io/description: "Checks pod phases and restart thresholds in selected namespaces"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/kubernetes"
+    marketplace.testkube.io/tags: "kubernetes,pods,health,restarts"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+    max_restarts:
+      type: string
+      default: "10"
+      description: "Maximum allowed restart count per pod"
+  steps:
+    - name: "Validate Pod Health"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+          - name: MAX_RESTARTS
+            value: "{{ config.max_restarts }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+          failed=0
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking pod health in namespace: $ns_trimmed"
+
+            kubectl get pods -n "$ns_trimmed" >/dev/null 2>&1 || continue
+            if [ "$(kubectl get pods -n "$ns_trimmed" --no-headers | wc -l | xargs)" = "0" ]; then
+              echo "No pods found in $ns_trimmed, skipping."
+              continue
+            fi
+
+            bad_phase="$(kubectl get pods -n "$ns_trimmed" --no-headers | awk '$3!="Running" && $3!="Completed" {print $1, $3}')"
+            if [ -n "$bad_phase" ]; then
+              echo "FAIL: Non-healthy pod phases:"
+              echo "$bad_phase"
+              failed=1
+            fi
+
+            restart_violations="$(kubectl get pods -n "$ns_trimmed" --no-headers | awk -v max="$MAX_RESTARTS" '$4+0 > max {print $1, "restarts=" $4}')"
+            if [ -n "$restart_violations" ]; then
+              echo "FAIL: Restart threshold violations:"
+              echo "$restart_violations"
+              failed=1
+            fi
+          done
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "Pod health validation passed."

@@ -1,0 +1,56 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: pv-attachment-check
+  labels:
+    marketplace.testkube.io/category: storage
+    marketplace.testkube.io/component: persistent-volumes
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "PV Attachment Check"
+    marketplace.testkube.io/description: "Validates that each PVC in selected namespaces is mounted by at least one pod"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/kubernetes"
+    marketplace.testkube.io/tags: "kubernetes,pvc,pv,storage,volume"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+  steps:
+    - name: "Validate PV Attachments"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+          failed=0
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking PVC attachments in namespace: $ns_trimmed"
+
+            pvc_names="$(kubectl get pvc -n "$ns_trimmed" -o custom-columns=NAME:.metadata.name --no-headers 2>/dev/null || true)"
+            [ -n "$pvc_names" ] || continue
+
+            pod_volumes="$(kubectl get pods -n "$ns_trimmed" -o jsonpath='{range .items[*]}{.metadata.name}{"|"}{range .spec.volumes[*]}{.persistentVolumeClaim.claimName}{","}{end}{"\n"}{end}')"
+            OLD_IFS="$IFS"
+            IFS="$(printf '\n')"
+            for pvc in $pvc_names; do
+              [ -z "$pvc" ] && continue
+              if echo "$pod_volumes" | grep -q "|.*$pvc,"; then
+                echo "OK: $ns_trimmed/$pvc is mounted"
+              else
+                echo "FAIL: $ns_trimmed/$pvc is not mounted by any pod"
+                failed=1
+              fi
+            done
+            IFS="$OLD_IFS"
+          done
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "PV attachment validation passed."

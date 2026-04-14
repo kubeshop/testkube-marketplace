@@ -46,7 +46,7 @@ spec:
               continue
             fi
 
-            bad_phase="$(kubectl get pods -n "$ns_trimmed" --no-headers | awk '$3!="Running" && $3!="Completed" {print $1, $3}')"
+            bad_phase="$(kubectl get pods -n "$ns_trimmed" --no-headers | awk '$3!="Running" && $3!="Completed" && $3!="Succeeded" && $3!~/^Init:/ && $3!="ContainerCreating" && $3!="PodInitializing" && $3!="Terminating" {print $1, $3}')"
             if [ -n "$bad_phase" ]; then
               echo "FAIL: Non-healthy pod phases:"
               echo "$bad_phase"

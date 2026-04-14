@@ -36,7 +36,7 @@ spec:
             kubectl get statefulset -n "$ns_trimmed" >/dev/null 2>&1 || continue
 
             invalid="$(kubectl get statefulset -n "$ns_trimmed" -o custom-columns=NAME:.metadata.name,READY:.status.readyReplicas,REPLICAS:.spec.replicas --no-headers | awk '
-              { ready=$2; if (ready=="" || ready=="<none>") ready=0; if (ready != $3) print $1, "ready=" ready, "expected=" $3 }')"
+              { ready=$2; if (ready=="" || ready=="<none>") ready=0; desired=$3; if (desired=="" || desired=="<none>") desired=1; if (ready != desired) print $1, "ready=" ready, "expected=" desired }')"
             if [ -n "$invalid" ]; then
               echo "FAIL: StatefulSet replica mismatch:"
               echo "$invalid"

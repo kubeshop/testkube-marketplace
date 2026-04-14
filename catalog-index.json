@@ -1,5 +1,15 @@
 [
   {
+    "path": "workflows/databases/generic/database-health-check.yaml",
+    "name": "database-health-check",
+    "category": "databases",
+    "component": "generic",
+    "displayName": "Generic Database Health Check",
+    "description": "Checks database-like pods for running phase in selected namespaces",
+    "icon": "https://cdn.simpleicons.org/databricks",
+    "readme": "workflows/databases/generic/README.md"
+  },
+  {
     "path": "workflows/databases/postgresql/postgresql-connectivity.yaml",
     "name": "postgresql-connectivity",
     "category": "databases",
@@ -28,5 +38,65 @@
     "description": "Validates Kafka broker connectivity, topic listing, and basic produce/consume operations",
     "icon": "https://cdn.simpleicons.org/apachekafka",
     "readme": "workflows/messaging/kafka/README.md"
+  },
+  {
+    "path": "workflows/networking/ingress/ingress-health-check.yaml",
+    "name": "ingress-health-check",
+    "category": "networking",
+    "component": "ingress",
+    "displayName": "Ingress Health Check",
+    "description": "Validates ingress backend services and endpoint availability",
+    "icon": "https://cdn.simpleicons.org/nginx",
+    "readme": "workflows/networking/ingress/README.md"
+  },
+  {
+    "path": "workflows/other/kubernetes-core/k8s-resources-check.yaml",
+    "name": "k8s-resources-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Kubernetes Resources Check",
+    "description": "Validates PVC binding and prints CPU/RAM request-limit snapshots",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/other/kubernetes-core/README.md"
+  },
+  {
+    "path": "workflows/other/kubernetes-core/namespace-scope-check.yaml",
+    "name": "namespace-scope-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Namespace Scope Check",
+    "description": "Validates namespace accessibility and basic scoped resources",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/other/kubernetes-core/README.md"
+  },
+  {
+    "path": "workflows/other/kubernetes-core/pod-health-check.yaml",
+    "name": "pod-health-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Pod Health Check",
+    "description": "Checks pod phases and restart thresholds in selected namespaces",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/other/kubernetes-core/README.md"
+  },
+  {
+    "path": "workflows/other/kubernetes-core/statefulset-health-check.yaml",
+    "name": "statefulset-health-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "StatefulSet Health Check",
+    "description": "Validates that StatefulSet ready replicas match desired replicas",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/other/kubernetes-core/README.md"
+  },
+  {
+    "path": "workflows/storage/persistent-volumes/pv-attachment-check.yaml",
+    "name": "pv-attachment-check",
+    "category": "storage",
+    "component": "persistent-volumes",
+    "displayName": "PV Attachment Check",
+    "description": "Validates that each PVC in selected namespaces is mounted by at least one pod",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/storage/persistent-volumes/README.md"
   }
 ]

@@ -1,0 +1,43 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: namespace-scope-check
+  labels:
+    marketplace.testkube.io/category: kubernetes
+    marketplace.testkube.io/component: kubernetes-core
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "Namespace Scope Check"
+    marketplace.testkube.io/description: "Validates namespace accessibility and basic scoped resources"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/kubernetes"
+    marketplace.testkube.io/tags: "kubernetes,namespace,scope,health"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+  steps:
+    - name: "Validate Namespace Scope"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking namespace: $ns_trimmed"
+            kubectl get namespace "$ns_trimmed" >/dev/null
+            kubectl get pods -n "$ns_trimmed" >/dev/null
+            kubectl get services -n "$ns_trimmed" >/dev/null
+            kubectl get ingress -n "$ns_trimmed" >/dev/null || true
+            kubectl get statefulset -n "$ns_trimmed" >/dev/null || true
+            kubectl get pvc -n "$ns_trimmed" >/dev/null || true
+          done
+
+          echo "Namespace scope validation passed."

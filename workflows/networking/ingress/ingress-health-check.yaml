@@ -1,0 +1,58 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: ingress-health-check
+  labels:
+    marketplace.testkube.io/category: networking
+    marketplace.testkube.io/component: ingress
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "Ingress Health Check"
+    marketplace.testkube.io/description: "Validates ingress backend services and endpoint availability"
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/nginx"
+    marketplace.testkube.io/tags: "kubernetes,ingress,networking,endpoints"
+spec:
+  config:
+    target_namespaces:
+      type: string
+      default: "default"
+      description: "Comma-separated namespaces to validate"
+  steps:
+    - name: "Validate Ingress Health"
+      run:
+        image: docker.io/library/alpine:3.20@sha256:a4f4213abb84c497377b8544c81b3564f313746700372ec4fe84653e4fb03805
+        env:
+          - name: TARGET_NAMESPACES
+            value: "{{ config.target_namespaces }}"
+        shell: |
+          set -eu
+          apk add --no-cache kubectl >/dev/null
+          failed=0
+
+          IFS=','
+          for ns in $TARGET_NAMESPACES; do
+            ns_trimmed="$(echo "$ns" | xargs)"
+            echo "Checking ingress resources in namespace: $ns_trimmed"
+
+            ingresses="$(kubectl get ingress -n "$ns_trimmed" -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' 2>/dev/null || true)"
+            [ -n "$ingresses" ] || continue
+
+            OLD_IFS="$IFS"
+            IFS="$(printf '\n')"
+            for ing in $ingresses; do
+              services="$(kubectl get ingress "$ing" -n "$ns_trimmed" -o jsonpath='{range .spec.rules[*].http.paths[*]}{.backend.service.name}{"\n"}{end}{.spec.defaultBackend.service.name}{"\n"}' | awk 'NF')"
+              [ -n "$services" ] || { failed=1; echo "FAIL: No backend service for $ing"; continue; }
+
+              for svc in $services; do
+                endpoints="$(kubectl get endpoints "$svc" -n "$ns_trimmed" -o jsonpath='{.subsets[*].addresses[*].ip}')"
+                if [ -z "$endpoints" ]; then
+                  echo "FAIL: Service $ns_trimmed/$svc has no ready endpoints"
+                  failed=1
+                fi
+              done
+            done
+            IFS="$OLD_IFS"
+          done
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "Ingress validation passed."

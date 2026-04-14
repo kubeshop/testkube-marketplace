@@ -3,7 +3,7 @@ kind: TestWorkflow
 metadata:
   name: namespace-scope-check
   labels:
-    marketplace.testkube.io/category: other
+    marketplace.testkube.io/category: kubernetes
     marketplace.testkube.io/component: kubernetes-core
     marketplace.testkube.io/validation-type: health
   annotations:

@@ -8,7 +8,7 @@ metadata:
     marketplace.testkube.io/validation-type: health
   annotations:
     marketplace.testkube.io/display-name: "NVIDIA GPU Node Check"
-    marketplace.testkube.io/description: "Validates that GPU nodes are accessible and CUDA workloads can be scheduled. Requires NVIDIA GPU Operator or device plugin. Defaults to any GPU node — set node_selector_key/value to target specific GPU models."
+    marketplace.testkube.io/description: "Validates GPU node accessibility and CUDA workload scheduling. Requires NVIDIA GPU Operator. Configurable node selector supports cross-cloud GPU targeting."
     marketplace.testkube.io/icon: "https://cdn.simpleicons.org/nvidia"
     marketplace.testkube.io/tags: "gpu,nvidia,cuda,kubernetes,hardware"
 spec:
@@ -41,4 +41,4 @@ spec:
   steps:
     - name: Run GPU validation
       run:
-        image: nvcr.io/nvidia/k8s/cuda-sample:vectoradd-cuda10.2
+        image: nvcr.io/nvidia/k8s/cuda-sample@sha256:4593078cdb8e786d35566faa2b84da1123acea42f0d4099e84e2af0448724af1

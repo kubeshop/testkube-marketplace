@@ -8,7 +8,7 @@ metadata:
     marketplace.testkube.io/validation-type: health
   annotations:
     marketplace.testkube.io/display-name: "NVIDIA GPU Node Check"
-    marketplace.testkube.io/description: "Validates GPU node accessibility and CUDA workload scheduling. Requires NVIDIA GPU Operator. Configurable node selector supports cross-cloud GPU targeting."
+    marketplace.testkube.io/description: "Validates GPU node accessibility and CUDA workload scheduling. Requires NVIDIA GPU Operator. Configurable node selector for cross-cloud GPU targeting."
     marketplace.testkube.io/icon: "https://cdn.simpleicons.org/nvidia"
     marketplace.testkube.io/tags: "gpu,nvidia,cuda,kubernetes,hardware"
 spec:
@@ -24,7 +24,7 @@ spec:
     gpu_count:
       type: integer
       default: 1
-      description: "Number of GPUs to request per pod"
+      description: "Number of GPUs to request"
   container:
     resources:
       limits:

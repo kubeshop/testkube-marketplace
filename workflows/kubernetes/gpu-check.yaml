@@ -1,0 +1,44 @@
+apiVersion: testworkflows.testkube.io/v1
+kind: TestWorkflow
+metadata:
+  name: nvidia-gpu-workflow
+  labels:
+    marketplace.testkube.io/category: kubernetes
+    marketplace.testkube.io/component: gpu-validation
+    marketplace.testkube.io/validation-type: health
+  annotations:
+    marketplace.testkube.io/display-name: "NVIDIA GPU Node Check"
+    marketplace.testkube.io/description: "Validates GPU node accessibility and CUDA workload scheduling. Requires NVIDIA GPU Operator. Configurable node selector for cross-cloud GPU targeting."
+    marketplace.testkube.io/icon: "https://cdn.simpleicons.org/nvidia"
+    marketplace.testkube.io/tags: "gpu,nvidia,cuda,kubernetes,hardware"
+spec:
+  config:
+    node_selector_key:
+      type: string
+      default: "nvidia.com/gpu.present"
+      description: "Node label key for GPU targeting. Use nvidia.com/gpu.product for specific GPU model."
+    node_selector_value:
+      type: string
+      default: "true"
+      description: "Node label value to match. e.g. 'true' for any GPU, or 'Tesla-T4-PCIE-16GB' for specific model."
+    gpu_count:
+      type: integer
+      default: 1
+      description: "Number of GPUs to request"
+  container:
+    resources:
+      limits:
+        nvidia.com/gpu: "{{ config.gpu_count }}"
+        memory: 200Mi
+        cpu: 100m
+      requests:
+        nvidia.com/gpu: "{{ config.gpu_count }}"
+        memory: 200Mi
+        cpu: 100m
+  pod:
+    nodeSelector:
+      "{{ config.node_selector_key }}": "{{ config.node_selector_value }}"
+  steps:
+    - name: Run GPU validation
+      run:
+        image: nvcr.io/nvidia/k8s/cuda-sample@sha256:4593078cdb8e786d35566faa2b84da1123acea42f0d4099e84e2af0448724af1

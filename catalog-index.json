@@ -30,6 +30,56 @@
     "readme": "workflows/databases/redis/README.md"
   },
   {
+    "path": "workflows/kubernetes/gpu-check.yaml",
+    "name": "nvidia-gpu-workflow",
+    "category": "kubernetes",
+    "component": "gpu-validation",
+    "displayName": "NVIDIA GPU Node Check",
+    "description": "Validates GPU node accessibility and CUDA workload scheduling. Requires NVIDIA GPU Operator. Configurable node selector for cross-cloud GPU targeting.",
+    "icon": "https://cdn.simpleicons.org/nvidia",
+    "readme": "workflows/kubernetes/README.md"
+  },
+  {
+    "path": "workflows/kubernetes/k8s-resources-check.yaml",
+    "name": "k8s-resources-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Kubernetes Resources Check",
+    "description": "Validates PVC binding and prints CPU/RAM request-limit snapshots",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/kubernetes/README.md"
+  },
+  {
+    "path": "workflows/kubernetes/namespace-scope-check.yaml",
+    "name": "namespace-scope-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Namespace Scope Check",
+    "description": "Validates namespace accessibility and basic scoped resources",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/kubernetes/README.md"
+  },
+  {
+    "path": "workflows/kubernetes/pod-health-check.yaml",
+    "name": "pod-health-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "Pod Health Check",
+    "description": "Checks pod phases and restart thresholds in selected namespaces",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/kubernetes/README.md"
+  },
+  {
+    "path": "workflows/kubernetes/statefulset-health-check.yaml",
+    "name": "statefulset-health-check",
+    "category": "kubernetes",
+    "component": "kubernetes-core",
+    "displayName": "StatefulSet Health Check",
+    "description": "Validates that StatefulSet ready replicas match desired replicas",
+    "icon": "https://cdn.simpleicons.org/kubernetes",
+    "readme": "workflows/kubernetes/README.md"
+  },
+  {
     "path": "workflows/messaging/kafka/kafka-connectivity.yaml",
     "name": "kafka-connectivity",
     "category": "messaging",
@@ -48,46 +98,6 @@
     "description": "Validates ingress backend services and endpoint availability",
     "icon": "https://cdn.simpleicons.org/nginx",
     "readme": "workflows/networking/ingress/README.md"
-  },
-  {
-    "path": "workflows/other/kubernetes-core/k8s-resources-check.yaml",
-    "name": "k8s-resources-check",
-    "category": "kubernetes",
-    "component": "kubernetes-core",
-    "displayName": "Kubernetes Resources Check",
-    "description": "Validates PVC binding and prints CPU/RAM request-limit snapshots",
-    "icon": "https://cdn.simpleicons.org/kubernetes",
-    "readme": "workflows/other/kubernetes-core/README.md"
-  },
-  {
-    "path": "workflows/other/kubernetes-core/namespace-scope-check.yaml",
-    "name": "namespace-scope-check",
-    "category": "kubernetes",
-    "component": "kubernetes-core",
-    "displayName": "Namespace Scope Check",
-    "description": "Validates namespace accessibility and basic scoped resources",
-    "icon": "https://cdn.simpleicons.org/kubernetes",
-    "readme": "workflows/other/kubernetes-core/README.md"
-  },
-  {
-    "path": "workflows/other/kubernetes-core/pod-health-check.yaml",
-    "name": "pod-health-check",
-    "category": "kubernetes",
-    "component": "kubernetes-core",
-    "displayName": "Pod Health Check",
-    "description": "Checks pod phases and restart thresholds in selected namespaces",
-    "icon": "https://cdn.simpleicons.org/kubernetes",
-    "readme": "workflows/other/kubernetes-core/README.md"
-  },
-  {
-    "path": "workflows/other/kubernetes-core/statefulset-health-check.yaml",
-    "name": "statefulset-health-check",
-    "category": "kubernetes",
-    "component": "kubernetes-core",
-    "displayName": "StatefulSet Health Check",
-    "description": "Validates that StatefulSet ready replicas match desired replicas",
-    "icon": "https://cdn.simpleicons.org/kubernetes",
-    "readme": "workflows/other/kubernetes-core/README.md"
   },
   {
     "path": "workflows/storage/persistent-volumes/pv-attachment-check.yaml",

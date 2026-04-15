@@ -59,6 +59,7 @@ Place your workflow in the correct category folder:
 | `observability/` | Prometheus, Grafana, Jaeger, Loki, etc. |
 | `security/` | Vault, cert-manager, Keycloak, etc. |
 | `kubernetes/` | Kubernetes specific health checks - pods, resources, storage, etc. |
+| `other/` | Whatever doesn't fit in any of these categories |
 
 > **Need a new category?** Open an issue to request additions to the approved list.
 

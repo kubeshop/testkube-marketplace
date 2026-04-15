@@ -58,7 +58,7 @@ Place your workflow in the correct category folder:
 | `networking/` | NGINX Ingress, Traefik, Istio, Linkerd, etc. |
 | `observability/` | Prometheus, Grafana, Jaeger, Loki, etc. |
 | `security/` | Vault, cert-manager, Keycloak, etc. |
-| `other/` | Whatever doesn't fit in any of these categories |
+| `kubernetes/` | Kubernetes specific health checks - pods, resources, storage, etc. |
 
 > **Need a new category?** Open an issue to request additions to the approved list.
 
@@ -95,6 +95,7 @@ Only images from these registries are permitted:
 | `docker.io/grafana/` | Official Grafana images |
 | `docker.io/curlimages/` | Official curl images |
 | `docker.io/confluentinc/` | Official Confluent/Kafka images |
+| `nvcr.io/nvidia/` | Official NVIDIA NGC images (GPU/CUDA workloads) |
 
 > **Need a new registry?** Open an issue to request additions to the approved list.
 

@@ -35,5 +35,8 @@ registries:
   # Confluent (Kafka ecosystem)
   - "docker.io/confluentinc/"
 
+  # NVIDIA NGC - official NVIDIA container registry for GPU/CUDA workloads
+  - "nvcr.io/nvidia/"
+
 # Note: All images must also use digest pinning (@sha256:...)
 # Tags alone (even from approved registries) are not permitted

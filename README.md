@@ -23,6 +23,7 @@ workflows/
 ├── networking/         # Ingress controllers, Service mesh
 ├── observability/      # Prometheus, Grafana, Jaeger
 └── security/           # Vault, cert-manager
+└── kubernetes/         # GPUs, Namespaces, Pod-Health, etc
 └── other/              # Anything that doesn't fit these categories
 
 ```
@@ -31,16 +32,57 @@ workflows/
 
 ### 1. Browse Available TestWorkflows
 
-Explore the `workflows/` directory to find validation TestWorkflows for your infrastructure components. 
+You can browse the marketplace from the Testkube Dashboard, the CLI, or directly in this GitHub
+repository — see the full guide in the [Testkube docs](https://docs.testkube.io/articles/examples/marketplace).
 
-The [Testkube Dashboard](https://docs.testkube.io/articles/testkube-dashboard-explore) provides a wizard for browsing this repository when create new TestWorkflows:
+**From the CLI** (works with both OSS and Pro/Cloud installs):
+
+```bash
+# List every workflow
+testkube marketplace list
+
+# Filter by category or component
+testkube marketplace list --category databases
+testkube marketplace list --component redis
+
+# Inspect a workflow's parameters and metadata
+testkube marketplace get redis-connectivity
+```
+
+**From the Dashboard:** the [Testkube Dashboard](https://docs.testkube.io/articles/testkube-dashboard-explore)
+provides a wizard for browsing this repository when creating new TestWorkflows:
 
 ![Create From Catalog](create-from-catalog.png)
 
+**From this repo:** explore the `workflows/` directory to find validation TestWorkflows for your
+infrastructure components.
 
 ### 2. Deploy a TestWorkflow
 
-If you're not using the Wizard mentioned above, clone this repo or download the Workflow YAML, and then
+The fastest way is to install directly from the marketplace, applying any parameter overrides up front:
+
+```bash
+# Install with the workflow's defaults
+testkube marketplace install redis-connectivity
+
+# Override one or more parameters; values are written into spec.config.<key>.default
+testkube marketplace install redis-connectivity \
+  --set host=my-redis.default.svc.cluster.local \
+  --set port=6379
+
+# Validate without creating, or upsert an existing workflow
+testkube marketplace install redis-connectivity --dry-run
+testkube marketplace install redis-connectivity --update
+```
+
+You can also apply a workflow directly from its raw GitHub URL without cloning the repo:
+
+```bash
+testkube create testworkflow --url \
+  https://raw.githubusercontent.com/kubeshop/testkube-marketplace/main/workflows/databases/redis/redis-connectivity.yaml
+```
+
+Or, if you prefer working from a local checkout:
 
 ```bash
 # Apply directly to your Testkube instance
@@ -53,14 +95,17 @@ testkube create testworkflow -f workflows/databases/redis/redis-connectivity.yam
 ### 3. Run the TestWorkflow
 
 ```bash
-# Run with default configuration
+# Run with the defaults (or whatever values were applied via marketplace install --set)
 testkube run testworkflow redis-connectivity
 
-# Run with custom parameters
+# Or override parameters per-run with --config
 testkube run testworkflow redis-connectivity \
   --config host=my-redis.default.svc.cluster.local \
   --config port=6379
 ```
+
+> Tip: `testkube marketplace install --set key=value` rewrites the workflow's `spec.config.<key>.default`
+> values, so subsequent `testkube run` calls do not need to repeat `--config` overrides.
 
 ## TestWorkflow Metadata
 
